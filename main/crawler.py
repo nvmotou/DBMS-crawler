@@ -36,12 +36,13 @@ pdfFile.close()
 # 获取网页内容
 r = requests.get('https://plants.usda.gov/java/factSheet?sort=factSheet')
 data = r.text
+# data.replace('<')
 
 # 利用正则查找指定的内容
 # pattern = re.compile("href=\"profile\?symbol=(\w*)\" target=\"")
 # res = pattern.search('forum/ABC/topic/CDF').groups()
 
-symbols = re.findall(r"scope=\"row\">(\w*)</th>", data)
+symbols = re.findall(r"scope=\"row\">(\w*)</th>\r\n        <td class=\"resultsind1\">[\s\S]*?</td>", data)
 sci_names = []# re.findall(r"Fact Sheet for (\w*) in Word Format", data)
 com_names = []# re.findall(r"</a></td><td>(\w*\s*\w*)</td>", data)
 pos = 0
@@ -49,13 +50,13 @@ print(len(symbols))
 # href="/factsheet/doc/fs_abba.docx"
 # <td><a href="profile?symbol=ACKO2" target="_top"><em>Acacia</em> <em>koaia</em></a></td><td>koaoha</td>
 while pos < len(symbols) :
-    print (symbols[pos])
-    pattern1 = re.compile(r"scope=\"row\">" + symbols[pos] + "[\s\S]*?</td>")
-    #sousuo = pattern1.findall(data)
-    #print(len(sousuo))
-    #pattern2 = re.compile(r"<em>(\w*)</em>")
-    #sci_name = pattern2.search(sousuo).groups()
-    #i = 0
+    # print (symbols[pos])
+    # pattern1 = re.compile(r"scope=\"row\">" + symbols[pos] + "[\s\S]*?</td>")
+    # sousuo = pattern1.findall(data)
+    # print(len(sousuo))
+    # pattern2 = re.compile(r"<em>(\w*)</em>")
+    # sci_name = pattern2.search(sousuo).groups()
+    # i = 0
     """
     while i < len(sci_name):
         if(i!=len(sci_name)-1):
