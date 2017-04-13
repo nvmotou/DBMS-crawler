@@ -42,7 +42,7 @@ data = r.text
 # pattern = re.compile("href=\"profile\?symbol=(\w*)\" target=\"")
 # res = pattern.search('forum/ABC/topic/CDF').groups()
 
-symbols = re.findall(r"scope=\"row\">(\w*)</th>\r\n        <td class=\"resultsind1\">[\s\S]*?</td>", data)
+symbols = re.findall(r"<td class=\"resultsind1\">([\s\S]*?)</td>", data)
 sci_names = []# re.findall(r"Fact Sheet for (\w*) in Word Format", data)
 com_names = []# re.findall(r"</a></td><td>(\w*\s*\w*)</td>", data)
 pos = 0
@@ -67,7 +67,7 @@ while pos < len(symbols) :
     """
     # print (sci_names[pos])
     # print (com_names[pos])
-    coreWebdata = requests.get('https://plants.usda.gov/core/profile?symbol=' + symbols[pos])
+    # coreWebdata = requests.get('https://plants.usda.gov/core/profile?symbol=' + symbols[pos])
     pos += 1
 
 
