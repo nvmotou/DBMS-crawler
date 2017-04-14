@@ -1,7 +1,6 @@
 from urllib.request import urlopen
 from pdfminer.pdfinterp import PDFResourceManager, process_pdf
 from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
 from io import StringIO
 import requests
 import re
@@ -10,7 +9,35 @@ import time
 from lxml import etree
 from selenium import webdriver
 from gooseeker import GsExtractor
+from pdfminer.layout import *
+import io
+import sys
 # from io import open
+
+
+def convert_pdf(path, page=1):
+    path = "data/" + path + ".pdf"
+    rsrcmgr = PDFResourceManager()
+    retstr = StringIO()
+    laparams = LAParams()
+    device = TextConverter(rsrcmgr, retstr, pageno=page, laparams=laparams)
+    fp = open(path, 'rb')
+    process_pdf(rsrcmgr, device, fp)
+    fp.close()
+    device.close()
+    str = retstr.getvalue()
+    retstr.close()
+    return str
+
+file1= open("data4.txt")
+while 1:
+    line = file1.readline()
+    if not line:
+        break
+    line = line.strip('\n')
+    f = open("data_1/" + line + ".txt", "w+")
+    print(convert_pdf(line), file=f)
+
 
 """
 def readPDF(pdfFile):
@@ -33,6 +60,7 @@ pdfFile.close()
 """
 
 
+"""
 # 获取网页内容
 r = requests.get('https://plants.usda.gov/java/factSheet?sort=factSheet')
 data = r.text
@@ -57,18 +85,18 @@ while pos < len(symbols) :
     # pattern2 = re.compile(r"<em>(\w*)</em>")
     # sci_name = pattern2.search(sousuo).groups()
     # i = 0
-    """
+    
     while i < len(sci_name):
         if(i!=len(sci_name)-1):
             sci_names[pos] += (sci_name[i] + " ")
         else:
             sci_names[pos] += sci_name[i]
         i += 1
-    """
     # print (sci_names[pos])
     # print (com_names[pos])
     # coreWebdata = requests.get('https://plants.usda.gov/core/profile?symbol=' + symbols[pos])
     pos += 1
+"""
 
 
 """
