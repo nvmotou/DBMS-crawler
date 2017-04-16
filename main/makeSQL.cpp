@@ -11,13 +11,13 @@ int main()
 {
 	while(1)
 	{
-		cout<<"ÇëÊäÈëÄãÏëÉú³ÉµÄsql½Å±¾µÄ±àºÅ£º"<<endl;
-		cout<<"1.´´½¨³õÊ¼±í²¢²åÈëÖ÷¼üsymbol"<<endl;
-		cout<<"2.²åÈëÖ»ÓÐscientific name¶øÃ»ÓÐcommon nameµÄÖ²ÎïµÄscientific name"<<endl;
-		cout<<"3.²åÈëÓµÓÐscientific nameºÍcommon nameµÄÖ²ÎïµÄscientific nameºÍcommon name"<<endl;
-		cout<<"4.²åÈëprofileÒ³ÃæÖÐµÄºÚÌå±êÇ©"<<endl;
-		cout<<"5.²åÈëcharacteristicÒ³ÃæÖÐµÄÐÅÏ¢"<<endl;
-		cout<<"6.ÍË³ö"<<endl;
+		cout<<"è¯·è¾“å…¥ä½ æƒ³ç”Ÿæˆçš„sqlè„šæœ¬çš„ç¼–å·ï¼š"<<endl;
+		cout<<"1.åˆ›å»ºåˆå§‹è¡¨å¹¶æ’å…¥ä¸»é”®symbol"<<endl;
+		cout<<"2.æ’å…¥åªæœ‰scientific nameè€Œæ²¡æœ‰common nameçš„æ¤ç‰©çš„scientific name"<<endl;
+		cout<<"3.æ’å…¥æ‹¥æœ‰scientific nameå’Œcommon nameçš„æ¤ç‰©çš„scientific nameå’Œcommon name"<<endl;
+		cout<<"4.æ’å…¥profileé¡µé¢ä¸­çš„é»‘ä½“æ ‡ç­¾"<<endl;
+		cout<<"5.æ’å…¥characteristicé¡µé¢ä¸­çš„ä¿¡æ¯"<<endl;
+		cout<<"6.é€€å‡º"<<endl;
 		int choice = 0;
 		cin>>choice;
 		switch(choice)
@@ -100,9 +100,9 @@ void insertSciCom()
 	com.open("com.txt");
 	for(int i=0;i<1052;i++)
 	{
-		sym>>profile[0];
-		sci>>profile[1];
-		com>>profile[2];
+		getline(sym,profile[0]);
+		getline(sym,profile[1]);
+		getline(sym,profile[2]);
 		w<<"update usdaplant set Scientific_Name = '"+profile[1]+"' where Symbol='"+profile[0]+"';"<<endl;
 		w<<"update usdaplant set Common_Name = '"+profile[2]+"' where Symbol='"+profile[0]+"';"<<endl;
 	}
