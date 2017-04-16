@@ -43,11 +43,11 @@ This is my crawler homework using python.
 # pdfToTxt.bat和pdfToXml.bat
   将pdf批量转化为txt和xml
   
-# processData.cpp
+# pecessData.cpp
   主要是处理爬虫抓取的PDF数据，方便为集搜客爬虫软件提供线索来下载PDF并为方便字段命名
   
 # 各种数据文件
-  大部分都是从网页中使用集搜客爬虫软件直接抓取的，少部分手动搜集，大部分根据命名就可以知道是什么内容
-  
+  大部分都是从网页中使用集搜客爬虫软件直接抓取的，少部分手动搜集，大部分根据命名就可以知道是什么内容，其中包括大量的pdf还有转化得到的txt和xml文件，以及经过处理之后得到的txt文件和excel文件
+  
 # crawler.py
   python实现的提取pdf转化得到的xml信息并根据这些信息对PDF内容进行分割，最终得到字段名和字段的对应值，将其写入txt文件，生成sql脚本
