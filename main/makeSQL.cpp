@@ -101,8 +101,8 @@ void insertSciCom()
 	for(int i=0;i<1052;i++)
 	{
 		getline(sym,profile[0]);
-		getline(sym,profile[1]);
-		getline(sym,profile[2]);
+		getline(sci,profile[1]);
+		getline(com,profile[2]);
 		w<<"update usdaplant set Scientific_Name = '"+profile[1]+"' where Symbol='"+profile[0]+"';"<<endl;
 		w<<"update usdaplant set Common_Name = '"+profile[2]+"' where Symbol='"+profile[0]+"';"<<endl;
 	}
