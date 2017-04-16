@@ -9,6 +9,13 @@ This is my crawler homework using python.
 接着将PDF进行批量转化，得到大量一一对应的txt和xml文件。（这里用到了pdfminer中的pdf2txt.py，就是利用这个程序对大量PDF进行批处理）
 然后利用python对xml文件进行解析，得到黑体字标题，利用这些标题将txt进行分割，得到对应的内容直接生成sql脚本；利用C++程序对抓取到的网页信息进行分析，得到利于导出SQL脚本的形式。
 最后将SQL脚本导入数据库。
+最后完善阶段：
+1.一开始导入由于爬取规则定的存在问题，导致Symbol,Scientific_name和Common_name插入缺值，后经修正使得插入数量正确。
+2.插入profile页标签信息时遇到native_status列中内容换行的情况，果断使用了text进行存储。
+3.插入characteristic信息和插入pdf信息时发现总提示row size too large的错误使得插入列数较少，后来经过修改表引擎为myisam使得插入列数从197直线上升至525，取得重大突破。
+4.在检查时发现由于C++文件流读取规则的问题导致植物的Scientific_name和Common_name出现大量错误，最终将重载运算符改为getline，问题得到解决，并在此时机发现了之前缺少的一个植物的Common_name。
+唯一美中不足的地方：在插入有关内容时遇到字符集编码的问题，导致一些列的值插入失败，提示incorrect string，在修改几乎所有字符集为utf-8后问题仍未得到解决，最终放弃。
+在制作中对于特殊的信息进行了手动提取（如无Common_name的植物的Symbol和Scientific_name）、特殊的文件（如ccpg开头的文件）进行了手动操作，获取相关内容，将值加入到数据库中。
 
 # EGG-INFO
   这个是pdfminer的egg相关文件
