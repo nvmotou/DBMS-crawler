@@ -22,11 +22,14 @@ import re
 
 
 # 解析xml文件并得到标题
-file1= open("pdfNames.txt","r")
+file1 = open("pdfNames.txt","r")
 content = ''
 content1 = ''
 count = 0
+
 while 1:
+    content2 = ''
+    content3 = ''
     line = file1.readline()
     if not line:
         break
@@ -37,16 +40,37 @@ while 1:
     if line.find('cs_') != -1:
         strinfo = re.compile('cs_')
         b = strinfo.sub('pg_', line)
+    f1 = open('data_1/' + b + ".txt", 'r', encoding='utf-8')
+    text1 = f1.read()
+    f1.close()
     root = dom.documentElement
     itemlist1 = root.getElementsByTagName('textline')
     i = 0
-    begin1 = -1
+    j = 0
     end1 = -1
     title = ''
+    name = ''
     for item1 in itemlist1:
         content = ''
         itemlist = item1.getElementsByTagName('text')
-    # itemlist = root.getElementsByTagName('text')
+        c2 = ''
+        c3 = ''
+        for item in itemlist:
+            isize = item.getAttribute('size')
+            ifont = item.getAttribute('font')
+            if isize == '10.486' and ifont == 'TimesNewRomanPSMT':
+                c2 = c2 + item.firstChild.data
+            if isize == '9.224' and ifont == 'TimesNewRomanPSMT':
+                c3 = c3 + item.firstChild.data
+        if c2 != '' and c2 != ' ':
+            content2 = c2
+        if c3 != '':
+            content3 = c3
+
+    flag = False
+    for item1 in itemlist1:
+        content = ''
+        itemlist = item1.getElementsByTagName('text')
         for item in itemlist:
             isize = item.getAttribute('size')
             ifont = item.getAttribute('font')
@@ -58,15 +82,24 @@ while 1:
             title = content.strip()
             x = re.findall('[a-zA-Z0-9]+', title)
             title = '_'.join(x)
-            f1 = open('data_1/' + b + ".txt",'r',encoding='utf-8')
-            text1 = f1.read()
-            f1.close()
             if i == 0:
                 begin1 = text1.find(content)
                 i = 1
             else:
                 end1 = text1.find(content, begin1)
                 text2 = text1[begin1+len(content1)+1:end1]
+                if "Plant Materials <http://plant-materials.nrcs.usda.gov/>" in text2:
+                    text2 = text2.replace("Plant Materials <http://plant-materials.nrcs.usda.gov/> \nPlant Fact Sheet/Guide Coordination Page <http://plant-materials.nrcs.usda.gov/intranet/pfs.html> \nNational Plant Data Center <http://npdc.usda.gov> \n","")
+                if content2 in text2:
+                    sign1 = text2.find(content2)
+                    text2 = text2[0:sign1]
+                    flag = True
+                if content3 in text2:
+                    sign1 = text2.find(content3)
+                    text2 = text2[0:sign1]
+                text2 = text2.strip()
+                text2 = text2.replace("'","")
+                text2 = text2.replace('"','')
                 begin1 = end1
                 # 本来是打算写到文件里面的，但是由于C++抓取txt全部内容不如python方便所以使用Python生成sql脚本
                 f = open('pymakesql.txt',"a+",encoding='utf-8')
@@ -85,7 +118,31 @@ while 1:
                 # f = open("D:/pythonProjects/DBMS-crawler/main/data_3/" + b + "_" + name + ".txt", "w", encoding='utf-8')
                 # f.write('\''+text2+'\'')
                 # f.close()
-            content1 =content
+            content1 = content
+    name = title
+    text3 = text1[begin1+len(content1)+1:len(text1)]
+    if (content2 in text3) and (flag == False):
+        sign = text3.find(content2)
+        text3 = text3[0:sign]
+    if content3 in text3:
+        sign = text3.find(content3)
+        text3 = text3[0:sign]
+    text3 = text3.strip()
+    text3 = text3.replace("'","")
+    text3 = text3.replace('"','')
+    f = open('pymakesql.txt', "a+", encoding='utf-8')
+    f.write("drop procedure if exists schema_change;\n")
+    f.write("delimiter ';;';\n")
+    f.write("create procedure schema_change()\n")
+    f.write("begin\n")
+    f.write("if not exists (select * from information_schema.columns where table_name = 'usdaplant' and column_name = '" + b[0:2] + '_' + name + "') then\n")
+    f.write('alter table usdaplant add COLUMN ' + b[0:2] + '_' + name + ' LongText;\n')
+    f.write("end if;\n")
+    f.write("end;;\n")
+    f.write("delimiter ';';\n")
+    f.write("call schema_change();\n")
+    f.write("drop procedure if exists schema_change;\n")
+    f.write('update usdaplant set ' + b[0:2] + '_' + name + ' = \'' + text3 + '\' where Symbol = \'' + symbol.upper() + '\';\n')
     count += 1
     print ('已经完成'+str(count)+'个文件！请稍等...')
 
